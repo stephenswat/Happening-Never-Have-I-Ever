@@ -11,6 +11,7 @@ Form = require 'form'
 Util = require 'util'
 
 exports.render = ->
+	Dom.h2 Page.state.get(0) + ': ' + Page.state.get(1)
 	if Page.state.get(0) is 'advanced'
 		renderAdvanded()
 	else if Page.state.get(0) is 'round'
@@ -35,8 +36,10 @@ renderRoundList = ->
 	Ui.list ->
 		Ui.item ->
 			Dom.h2 "This is a list entry!"
+			Dom.onTap -> Page.nav ['round', 5]
 		Ui.item ->
 			Dom.h2 "This is also a list entry!"
+			Dom.onTap -> Page.nav ['round', 0]
 
 renderAdvanded = ->
 	Dom.h2 "Hello, World!"
