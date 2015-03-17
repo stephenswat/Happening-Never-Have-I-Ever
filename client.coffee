@@ -11,6 +11,8 @@ Form = require 'form'
 Util = require 'util'
 
 exports.render = ->
+	rounds = Db.shared.ref 'rounds'
+
 	Dom.h2 Page.state.get(0) + ': ' + Page.state.get(1)
 	if Page.state.get(0) is 'advanced'
 		renderAdvanded()
