@@ -1,10 +1,15 @@
 Db = require 'db'
+Util = require 'util'
 
-exports.onInstall = exports.onConfig = (config) ->
+
+exports.onInstall = exports.onConfig = exports.onUpgrade = exports.onJoin = (config) ->
 	Db.shared.set 'adult', config.adult if config?
 
-	# if !Db.shared.get('rounds')
-	# 	newRound()
+	if !Db.shared.get('rounds')
+		newRound()
+
+newRound = ->
+	eligable = (s for s in Util.questions when s[1] >= Db.shared.get 'adult')
 
 # exported functions prefixed with 'client_' are callable by our client code using `require('plugin').rpc`
 exports.client_incr = ->
