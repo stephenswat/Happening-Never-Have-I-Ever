@@ -11,19 +11,21 @@ Form = require 'form'
 Util = require 'util'
 
 exports.render = ->
-	rounds = Db.shared.ref 'rounds'
+	rounds = Db.shared.get 'rounds'
 
 	Dom.h2 Page.state.get(0) + ': ' + Page.state.get(1)
 	if Page.state.get(0) is 'advanced'
 		renderAdvanded()
 	else if Page.state.get(0) is 'round'
-		renderRound()
+		# renderRound(rounds[Page.state.get(1)])
+		renderRound(0)
 	else
 		renderRoundList()
 
-renderRound = ->
-	Dom.div !->
+renderRound = (round) ->
+	Dom.div ->
 		Dom.style fontSize: '150%', fontWeight: 'bold', textShadow: '0 1px 0 #fff', textAlign: 'center', padding: '4px 10px 10px 10px'
+		# Dom.text round
 		Dom.text Util.indexToQuestion(0)
 
 	Ui.bigButton 'I have!', ->
@@ -38,7 +40,7 @@ renderRoundList = ->
 	Ui.list ->
 		Ui.item ->
 			Dom.h2 "This is a list entry!"
-			Dom.onTap -> Page.nav ['round', 5]
+			Dom.onTap -> Page.nav ['round', 1]
 		Ui.item ->
 			Dom.h2 "This is also a list entry!"
 			Dom.onTap -> Page.nav ['round', 0]
