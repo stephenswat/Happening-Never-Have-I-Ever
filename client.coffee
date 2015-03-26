@@ -47,10 +47,10 @@ renderRound = (round_no) ->
 		ranking = Db.personal.ref('rounds', round_no)
 
 		Ui.bigButton 'I have!', ->
-			ranking.set(true)
+			Server.call 'registerVote', Plugin.userId(), true
 
 		Ui.bigButton 'I have not!', ->
-			ranking.set(false)
+			Server.call 'registerVote', Plugin.userId(), false
 
 renderRoundList = ->
 	renderRoundItem = (round) ->

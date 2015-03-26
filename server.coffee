@@ -16,6 +16,9 @@ exports.client_nextRound = nextRound = ->
 	if Db.shared.get 'rounds', current
 		Db.shared.set 'rounds', current, 'finished', true
 
+		if Db.shared.get 'votes'
+			Db.shared.set 'rounds', current, 'result', Db.shared.get 'votes'
+
 	newRound()
 
 newRound = ->
