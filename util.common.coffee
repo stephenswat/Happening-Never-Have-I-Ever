@@ -8,4 +8,7 @@ exports.questions = questions = -> [
 ]
 
 exports.indexToQuestion = (q) ->
-    "Never have I ever " + questions[q][0]
+    stringToQuestion questions[q][0]
+
+exports.stringToQuestion = stringToQuestion = (s) ->
+    "Never have I ever " + s
