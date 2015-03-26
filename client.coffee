@@ -37,6 +37,11 @@ renderRound = (round_no) ->
 
 	if round.get('finished')
 		Ui.bigButton 'Go to advanced...', -> Page.nav ['advanced']
+
+		Plugin.users.observeEach (user) ->
+			Dom.div ->
+				Ui.avatar Plugin.userAvatar(user.key())
+				Dom.text Plugin.userName(user.key())
 	else
 		ranking = Db.personal.ref('rounds', round_no) || Obs.create()
 
