@@ -34,6 +34,8 @@ newRound = ->
 			index: previous
 			question: question
 			time: time
+			finished: false
+			result: []
 
 		Timer.cancel()
 		Timer.set duration, 'newRound'
