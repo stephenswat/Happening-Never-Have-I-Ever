@@ -31,20 +31,20 @@ getRoundList = ->
 renderRound = (round_no) ->
 	round = Db.shared.ref 'rounds', round_no
 
+	Dom.div ->
+		Dom.style fontSize: '150%', fontWeight: 'bold', textShadow: '0 1px 0 #fff', textAlign: 'center', padding: '4px 10px 10px 10px'
+		Dom.text Util.stringToQuestion(round.get('question'))
+
 	if round.get('finished')
-		Dom.div ->
-			Dom.style fontSize: '150%', fontWeight: 'bold', textShadow: '0 1px 0 #fff', textAlign: 'center', padding: '4px 10px 10px 10px'
-			Dom.text Util.stringToQuestion(round.get('question'))
-
-		Ui.bigButton 'I have!', ->
-			{}.noSuchMethod()
-
-		Ui.bigButton 'I have not!', ->
-			{}.noSuchMethod()
-
 		Ui.bigButton 'Go to advanced...', -> Page.nav ['advanced']
 	else
-		Dom.h2 "Patat"
+		ranking = Db.personal.ref('rounds', round_no) || Obs.create()
+		
+		Ui.bigButton 'I have!', ->
+			ranking.set(true)
+
+		Ui.bigButton 'I have not!', ->
+			ranking.set(false)
 
 renderRoundList = ->
 	renderRoundItem = (round) ->
