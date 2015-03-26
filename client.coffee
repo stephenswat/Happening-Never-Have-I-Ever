@@ -43,6 +43,7 @@ renderRoundList = ->
 		Db.shared.ref('rounds').observeEach (round) !->
 			Ui.item ->
 				Dom.h2 Util.stringToQuestion(round.get('question'))
+				Dom.onTap -> Page.nav ['round', 0]
 
 renderAdvanded = ->
 	Dom.h2 "Hello, World!"
