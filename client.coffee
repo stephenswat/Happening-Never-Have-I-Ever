@@ -47,11 +47,15 @@ renderRound = (round_no) ->
 		ranking = Db.personal.ref('rounds', round_no)
 		my_vote = Db.shared.get('votes', Plugin.userId()) || null
 
-		Ui.bigButton (if my_vote == 1 then "Hello" else "") + 'I have!', ->
-			Server.call 'registerVote', Plugin.userId(), 1
+		Ui.bigButton ->
+			Dom.style marginTop: '14px', marginLeft: '0px', height: '90px', backgroundColor: (if my_vote == 2 then "#aaa" else ""), textAlign: 'center', fontSize: '250%', paddingTop: '50px'
+			Dom.text 'I have!'
+		, -> Server.call 'registerVote', Plugin.userId(), 1
 
-		Ui.bigButton (if my_vote == 2 then "Hello" else "") + 'I have not!', ->
-			Server.call 'registerVote', Plugin.userId(), 2
+		Ui.bigButton ->
+			Dom.style marginTop: '14px', marginRight: '0px', height: '90px', backgroundColor: (if my_vote == 1 then "#aaa" else ""), textAlign: 'center', fontSize: '250%', paddingTop: '50px'
+			Dom.text 'I have not!'
+		, -> Server.call 'registerVote', Plugin.userId(), 2
 
 renderRoundList = ->
 	renderRoundItem = (round) ->
