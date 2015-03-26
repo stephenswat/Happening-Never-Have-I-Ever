@@ -1,6 +1,7 @@
 Db = require 'db'
 Util = require 'util'
 
+questions = Util.questions()
 
 exports.onInstall = exports.onConfig = exports.onUpgrade = exports.onJoin = (config) ->
 	Db.shared.set 'adult', config.adult if config?
@@ -9,7 +10,15 @@ exports.onInstall = exports.onConfig = exports.onUpgrade = exports.onJoin = (con
 		newRound()
 
 newRound = ->
-	eligable = (s for s in Util.questions when s[1] >= Db.shared.get 'adult')
+	eligable = []
+	allowAdult = Db.shared.get 'adult'
+
+	for s, a in questions
+		if a >= allowAdult
+			eligable.push s
+
+	if eligable.length
+		index = Math.floor(Math.random() * eligable.length)
 
 # exported functions prefixed with 'client_' are callable by our client code using `require('plugin').rpc`
 exports.client_incr = ->
