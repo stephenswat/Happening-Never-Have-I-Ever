@@ -11,7 +11,7 @@ Form = require 'form'
 Util = require 'util'
 
 exports.render = ->
-	Dom.h2 Page.state.get(0) + ': ' + Page.state.get(1)
+	Dom.h2 Page.state.get(0) + ': ' + Page.state.get(1) + ': ' + Page.state.get(2)
 	if Page.state.get(0) is 'advanced'
 		renderAdvanded()
 	else if Page.state.get(0) is 'round'
@@ -42,13 +42,14 @@ renderRound = (round) ->
 	Ui.bigButton 'Go to advanced...', -> Page.nav ['advanced']
 
 renderRoundList = ->
-
+	renderRoundItem = (round) ->
+		Ui.item ->
+			Dom.h2 Util.stringToQuestion(round[0])
+			Dom.onTap -> Page.nav ['round', round[1]]
 
 	Ui.list ->
 		for i in getRoundList() by -1
-			Ui.item ->
-				Dom.h2 Util.stringToQuestion(i[0])
-				Dom.onTap -> Page.nav ['round', i[1]]
+			renderRoundItem(i)
 
 renderAdvanded = ->
 	Dom.h2 "Hello, World!"
