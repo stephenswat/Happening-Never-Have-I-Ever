@@ -36,7 +36,6 @@ newRound = ->
 
 		Db.shared.set 'round_no', previous
 		Db.shared.set 'rounds', previous,
-			index: previous
 			question: question
 			time: time
 			finished: false

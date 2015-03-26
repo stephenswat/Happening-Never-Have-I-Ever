@@ -24,7 +24,7 @@ getRoundList = ->
 	round_list = []
 
 	Db.shared.ref('rounds').observeEach (round) !->
-		round_list.push [round.get('question'), round.get('index')]
+		round_list.push [round.get('question'), round.key()]
 
 	round_list
 
@@ -39,7 +39,7 @@ renderRound = (round_no) ->
 		Ui.bigButton 'Go to advanced...', -> Page.nav ['advanced']
 	else
 		ranking = Db.personal.ref('rounds', round_no) || Obs.create()
-		
+
 		Ui.bigButton 'I have!', ->
 			ranking.set(true)
 
