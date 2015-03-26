@@ -88,9 +88,6 @@ renderRound = (round_no) ->
 	Social.renderComments round_no
 
 renderRoundList = ->
-	Dom.text "Next round in "
-	Time.deltaText(Db.shared.get('next'))
-
 	renderRoundItem = (round) ->
 		Ui.item ->
 			if !round.get('finished') and !Db.shared.get('votes', Plugin.userId())
@@ -102,7 +99,17 @@ renderRoundList = ->
 			# 	Dom.div !->
 			# 	Ui.unread unread, null, {marginLeft: '4px'}
 
-			Dom.h2 Util.stringToQuestion(round.get('question'))
+			Dom.div !->
+				Dom.style Flex: 1
+
+				Dom.b !->
+					Dom.text Util.stringToQuestion(round.get('question'))
+
+				if !round.get('finished')
+					Dom.div ->
+						Dom.text "Next round "
+						Time.deltaText(Db.shared.get('next'))
+
 			Dom.onTap -> Page.nav ['round', round.key()]
 
 	Ui.list ->
