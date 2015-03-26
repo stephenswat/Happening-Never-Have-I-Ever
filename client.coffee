@@ -113,4 +113,4 @@ exports.renderSettings = !->
 			Ui.button !->
 				Dom.style marginTop: '14px'
 				Dom.text tr("Start new round now")
-			, !-> Server.call 'newRound'
+			, !-> Server.call 'nextRound'

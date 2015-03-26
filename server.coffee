@@ -10,7 +10,10 @@ exports.onInstall = exports.onConfig = exports.onUpgrade = exports.onJoin = (con
 	if !Db.shared.get('rounds')
 		newRound()
 
-exports.client_newRound = newRound = ->
+exports.client_nextRound = nextRound = ->
+	newRound()
+
+newRound = ->
 	eligable = []
 	adult = Db.shared.get 'adult'
 	previous = Db.shared.get('rounds', 'previous') || 0
