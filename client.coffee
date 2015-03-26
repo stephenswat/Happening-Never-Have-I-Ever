@@ -20,7 +20,7 @@ exports.render = ->
 	else
 		renderRoundList()
 
-getRoundList = (round_no = null) ->
+getRoundList = ->
 	round_list = []
 
 	Db.shared.ref('rounds').observeEach (round) !->
