@@ -39,11 +39,6 @@ newRound = ->
 
 		Db.shared.set 'next', time + duration
 
-# exported functions prefixed with 'client_' are callable by our client code using `require('plugin').rpc`
-exports.client_incr = ->
-	log 'hello world!' # write to the plugin origin's log
-	Db.shared.modify 'counter', (v) -> v+1
-
 exports.client_getTime = (cb) ->
 	cb.reply new Date()
 

@@ -48,14 +48,6 @@ renderRoundList = ->
 renderAdvanded = ->
 	Dom.h2 "Hello, World!"
 
-	Obs.observe ->
-		# We're inside an additional observe scope here, such that our whole
-		# exports.render function won't need to rerun when the counter changes
-		# value.
-		currentValue = Db.shared.get('counter') # a reactive read from the shared database
-		Ui.bigButton "#{currentValue}++", ->
-			Server.call 'incr'
-
 	Ui.bigButton 'get server time', ->
 		Server.call 'getTime', (time) ->
 			Modal.show "it is now: #{time}"
