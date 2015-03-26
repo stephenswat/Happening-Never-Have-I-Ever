@@ -33,7 +33,7 @@ renderRound = (round_no) ->
 	round = Db.shared.ref 'rounds', round_no
 
 	Dom.div ->
-		Dom.style fontSize: '150%', fontWeight: 'bold', textShadow: '0 1px 0 #fff', textAlign: 'center', padding: '4px 10px 10px 10px'
+		Dom.style fontSize: '300%', fontWeight: 'bold', textShadow: '0 1px 0 #fff', textAlign: 'center', padding: '4px 10px 10px 10px'
 		Dom.text Util.stringToQuestion(round.get('question'))
 
 	if round.get('finished')
@@ -45,12 +45,13 @@ renderRound = (round_no) ->
 				Dom.text Plugin.userName(user.key())
 	else
 		ranking = Db.personal.ref('rounds', round_no)
+		my_vote = Db.shared.get('votes', Plugin.userId()) || null
 
-		Ui.bigButton 'I have!', ->
-			Server.call 'registerVote', Plugin.userId(), true
+		Ui.bigButton (if my_vote == 1 then "Hello" else "") + 'I have!', ->
+			Server.call 'registerVote', Plugin.userId(), 1
 
-		Ui.bigButton 'I have not!', ->
-			Server.call 'registerVote', Plugin.userId(), false
+		Ui.bigButton (if my_vote == 2 then "Hello" else "") + 'I have not!', ->
+			Server.call 'registerVote', Plugin.userId(), 2
 
 renderRoundList = ->
 	renderRoundItem = (round) ->
