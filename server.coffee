@@ -1,5 +1,6 @@
 Db = require 'db'
 Util = require 'util'
+Timer = require 'timer'
 
 questions = Util.questions()
 
@@ -20,20 +21,20 @@ newRound = ->
 
 	if eligable.length
 		index = Math.floor(Math.random() * eligable.length)
-		question = question[index][0]
-		time = 0|(Date.now()*.001)
+		question = questions[index][0]
+		time = 0 | (Date.now()*.001)
+		duration = Util.getRoundDuration(time)
+		previous += 1
 
-		Db.shared.set 'rounds', maxId,
-			qid: newQid
-			question: questions[newQid][0]
+		Db.shared.set 'rounds', 'previous', previous
+		Db.shared.set 'rounds', previous,
+			question: question
 			time: time
 
-		roundDuration = Util.getRoundDuration(time)
-
 		Timer.cancel()
-		Timer.set roundDuration*1000, 'newRound'
-		
-		Db.shared.set 'next', time+roundDuration
+		Timer.set duration, 'newRound'
+
+		Db.shared.set 'next', time + duration
 
 # exported functions prefixed with 'client_' are callable by our client code using `require('plugin').rpc`
 exports.client_incr = ->
