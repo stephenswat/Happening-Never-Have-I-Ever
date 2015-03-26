@@ -35,12 +35,35 @@ renderRound = (round_no) ->
 		Dom.text Util.stringToQuestion(round.get('question'))
 
 	if round.get('finished')
-		Ui.bigButton 'Go to advanced...', -> Page.nav ['advanced']
+		# Ui.bigButton 'Go to advanced...', -> Page.nav ['advanced']
+
+		did = []
+		didnt = []
 
 		Plugin.users.observeEach (user) ->
-			Dom.div ->
-				Ui.avatar Plugin.userAvatar(user.key())
-				Dom.text Plugin.userName(user.key())
+			if round.get('result', user.key()) == 1
+				did.push user.key()
+			if round.get('result', user.key()) == 2
+				didnt.push user.key()
+
+		if did.length > 0
+			Dom.h1 (if did.length == 1 then 'One person has.' else did.length + ' people have.')
+
+			Ui.list ->
+				for i in did
+					Ui.item ->
+						Ui.avatar Plugin.userAvatar(i)
+						Dom.text Plugin.userName(i)
+
+		if didnt.length > 0
+			Dom.h1 (if didnt.length == 1 then 'One person hasn\'t.' else didnt.length + ' people haven\'t.')
+
+			Ui.list ->
+				for i in didnt
+					Ui.item ->
+						Ui.avatar Plugin.userAvatar(i)
+						Dom.text Plugin.userName(i)
+
 	else
 		ranking = Db.personal.ref('rounds', round_no)
 		my_vote = Db.shared.get('votes', Plugin.userId()) || null
