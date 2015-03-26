@@ -10,6 +10,8 @@ Icon = require 'icon'
 Form = require 'form'
 {tr} = require 'i18n'
 Util = require 'util'
+Social = require 'social'
+Event = require 'event'
 
 exports.render = ->
 	if Page.state.get(0) is 'advanced'
@@ -82,11 +84,17 @@ renderRound = (round_no) ->
 						Ui.avatar Plugin.userAvatar(i)
 						Dom.text Plugin.userName(i)
 
+	Social.renderComments round_no
+
 renderRoundList = ->
 	renderRoundItem = (round) ->
 		Ui.item ->
 			if !round.get('finished') and !Db.shared.get('votes', Plugin.userId())
 				Icon.render data: 'new', style: { display: 'block', margin: '0 10 0 0' }, size: 34
+
+			if unread = Social.newComments(round.key())
+				Dom.div !->
+				Ui.unread unread, null, {marginLeft: '4px'}
 
 			Dom.h2 Util.stringToQuestion(round.get('question'))
 			Dom.onTap -> Page.nav ['round', round.key()]
