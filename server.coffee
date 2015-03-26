@@ -31,6 +31,7 @@ newRound = ->
 
 		Db.shared.set 'round_no', previous
 		Db.shared.set 'rounds', previous,
+			index: previous
 			question: question
 			time: time
 
@@ -41,6 +42,10 @@ newRound = ->
 
 exports.client_getTime = (cb) ->
 	cb.reply new Date()
+
+exports.client_resetRounds = ->
+	Db.shared.set 'rounds', null
+	Db.shared.set 'round_no', 0
 
 exports.client_error = ->
 	{}.noSuchMethod()

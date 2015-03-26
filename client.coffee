@@ -11,16 +11,21 @@ Form = require 'form'
 Util = require 'util'
 
 exports.render = ->
-	rounds = Db.shared.get 'rounds'
-
 	Dom.h2 Page.state.get(0) + ': ' + Page.state.get(1)
 	if Page.state.get(0) is 'advanced'
 		renderAdvanded()
 	else if Page.state.get(0) is 'round'
-		# renderRound(rounds[Page.state.get(1)])
-		renderRound(0)
+		renderRound(Page.state.get(1))
 	else
 		renderRoundList()
+
+getRoundList = ->
+	round_list = []
+
+	Db.shared.ref('rounds').observeEach (round) !->
+		round_list.push [round.get('question'), round.get('index')]
+
+	round_list
 
 renderRound = (round) ->
 	Dom.div ->
@@ -37,13 +42,13 @@ renderRound = (round) ->
 	Ui.bigButton 'Go to advanced...', -> Page.nav ['advanced']
 
 renderRoundList = ->
-	rounds = Db.shared.get 'rounds'
+
 
 	Ui.list ->
-		Db.shared.ref('rounds').observeEach (round) !->
+		for i in getRoundList() by -1
 			Ui.item ->
-				Dom.h2 Util.stringToQuestion(round.get('question'))
-				Dom.onTap -> Page.nav ['round', 0]
+				Dom.h2 Util.stringToQuestion(i[0])
+				Dom.onTap -> Page.nav ['round', i[1]]
 
 renderAdvanded = ->
 	Dom.h2 "Hello, World!"
@@ -57,6 +62,9 @@ renderAdvanded = ->
 
 	Ui.bigButton 'server error', ->
 		Server.call 'error'
+
+	Ui.bigButton 'reset rounds', ->
+		Server.call 'resetRounds'
 
 	Dom.div ->
 		Dom.style
