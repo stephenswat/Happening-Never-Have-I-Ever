@@ -35,6 +35,7 @@ newRound = ->
 		previous += 1
 
 		Db.shared.set 'round_no', previous
+		Db.shared.set 'votes', {}
 		Db.shared.set 'rounds', previous,
 			question: question
 			time: time
@@ -44,6 +45,10 @@ newRound = ->
 		Timer.set duration, 'newRound'
 
 		Db.shared.set 'next', time + duration
+
+# TODO: This should really work with the pesronal store!
+exports.client_registerVote = (user_id, vote) ->
+	Db.shared.set 'votes', user_id, vote
 
 exports.client_getTime = (cb) ->
 	cb.reply new Date()

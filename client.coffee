@@ -44,7 +44,7 @@ renderRound = (round_no) ->
 				Ui.avatar Plugin.userAvatar(user.key())
 				Dom.text Plugin.userName(user.key())
 	else
-		ranking = Db.personal.ref('rounds', round_no) || Obs.create()
+		ranking = Db.personal.ref('rounds', round_no)
 
 		Ui.bigButton 'I have!', ->
 			ranking.set(true)
