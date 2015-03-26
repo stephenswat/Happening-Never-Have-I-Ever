@@ -34,17 +34,35 @@ renderRound = (round_no) ->
 		Dom.style fontSize: '300%', fontWeight: 'bold', textShadow: '0 1px 0 #fff', textAlign: 'center', padding: '4px 10px 10px 10px'
 		Dom.text Util.stringToQuestion(round.get('question'))
 
-	if round.get('finished')
-		# Ui.bigButton 'Go to advanced...', -> Page.nav ['advanced']
+	if !round.get('finished')
+		ranking = Db.personal.ref('rounds', round_no)
+		my_vote = Db.shared.get('votes', Plugin.userId()) || null
 
+		Ui.bigButton ->
+			Dom.style marginTop: '14px', marginLeft: '0px', height: '90px', backgroundColor: (if my_vote == 2 then "#aaa" else ""), textAlign: 'center', fontSize: '250%', paddingTop: '50px'
+			Dom.text 'I have!'
+		, -> Server.call 'registerVote', Plugin.userId(), 1
+
+		Ui.bigButton ->
+			Dom.style marginTop: '14px', marginRight: '0px', height: '90px', backgroundColor: (if my_vote == 1 then "#aaa" else ""), textAlign: 'center', fontSize: '250%', paddingTop: '50px'
+			Dom.text 'I have not!'
+		, -> Server.call 'registerVote', Plugin.userId(), 2
+
+	if round.get('finished') or Db.shared.get('votes', Plugin.userId())
 		did = []
 		didnt = []
 
 		Plugin.users.observeEach (user) ->
-			if round.get('result', user.key()) == 1
-				did.push user.key()
-			if round.get('result', user.key()) == 2
-				didnt.push user.key()
+			if round.get('finished')
+				if round.get('result', user.key()) == 1
+					did.push user.key()
+				if round.get('result', user.key()) == 2
+					didnt.push user.key()
+			else
+				if Db.shared.get('votes', user.key()) == 1
+					did.push user.key()
+				if Db.shared.get('votes', user.key()) == 2
+					didnt.push user.key()
 
 		if did.length > 0
 			Dom.h1 (if did.length == 1 then 'One person has.' else did.length + ' people have.')
@@ -64,24 +82,10 @@ renderRound = (round_no) ->
 						Ui.avatar Plugin.userAvatar(i)
 						Dom.text Plugin.userName(i)
 
-	else
-		ranking = Db.personal.ref('rounds', round_no)
-		my_vote = Db.shared.get('votes', Plugin.userId()) || null
-
-		Ui.bigButton ->
-			Dom.style marginTop: '14px', marginLeft: '0px', height: '90px', backgroundColor: (if my_vote == 2 then "#aaa" else ""), textAlign: 'center', fontSize: '250%', paddingTop: '50px'
-			Dom.text 'I have!'
-		, -> Server.call 'registerVote', Plugin.userId(), 1
-
-		Ui.bigButton ->
-			Dom.style marginTop: '14px', marginRight: '0px', height: '90px', backgroundColor: (if my_vote == 1 then "#aaa" else ""), textAlign: 'center', fontSize: '250%', paddingTop: '50px'
-			Dom.text 'I have not!'
-		, -> Server.call 'registerVote', Plugin.userId(), 2
-
 renderRoundList = ->
 	renderRoundItem = (round) ->
 		Ui.item ->
-			if !round.get('finished')
+			if !round.get('finished') and !Db.shared.get('votes', Plugin.userId())
 				Icon.render data: 'new', style: { display: 'block', margin: '0 10 0 0' }, size: 34
 
 			Dom.h2 Util.stringToQuestion(round.get('question'))

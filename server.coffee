@@ -1,11 +1,15 @@
 Db = require 'db'
 Util = require 'util'
 Timer = require 'timer'
+Event = require 'event'
 
 questions = Util.questions()
 
 exports.onInstall = exports.onConfig = exports.onUpgrade = exports.onJoin = (config) ->
 	Db.shared.set 'adult', config.adult if config?
+
+	if !Db.shared.get 'round_no'
+		Db.shared.set 'round_no', 0
 
 	if !Db.shared.get('rounds')
 		newRound()
@@ -48,6 +52,10 @@ newRound = ->
 		Timer.set duration, 'newRound'
 
 		Db.shared.set 'next', time + duration
+
+		Event.create
+			unit: 'round'
+			text: "A new Never Have I Ever question: " + question
 
 # TODO: This should really work with the pesronal store!
 exports.client_registerVote = (user_id, vote) ->
