@@ -11,6 +11,11 @@ exports.onInstall = exports.onConfig = exports.onUpgrade = exports.onJoin = (con
 		newRound()
 
 exports.client_nextRound = nextRound = ->
+	current = (Db.shared.get 'round_no' || 0)
+
+	if Db.shared.get 'rounds', current
+		Db.shared.set 'rounds', current, 'finished', true
+
 	newRound()
 
 newRound = ->
@@ -35,7 +40,6 @@ newRound = ->
 			question: question
 			time: time
 			finished: false
-			result: []
 
 		Timer.cancel()
 		Timer.set duration, 'newRound'
