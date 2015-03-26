@@ -6,6 +6,7 @@ Plugin = require 'plugin'
 Page = require 'page'
 Server = require 'server'
 Ui = require 'ui'
+Icon = require 'icon'
 Form = require 'form'
 {tr} = require 'i18n'
 Util = require 'util'
@@ -24,7 +25,7 @@ getRoundList = ->
 	round_list = []
 
 	Db.shared.ref('rounds').observeEach (round) !->
-		round_list.push [round.get('question'), round.key()]
+		round_list.push round
 
 	round_list
 
@@ -54,8 +55,11 @@ renderRound = (round_no) ->
 renderRoundList = ->
 	renderRoundItem = (round) ->
 		Ui.item ->
-			Dom.h2 Util.stringToQuestion(round[0])
-			Dom.onTap -> Page.nav ['round', round[1]]
+			if !round.get('finished')
+				Icon.render data: 'new', style: { display: 'block', margin: '0 10 0 0' }, size: 34
+
+			Dom.h2 Util.stringToQuestion(round.get('question'))
+			Dom.onTap -> Page.nav ['round', round.key()]
 
 	Ui.list ->
 		for i in getRoundList() by -1
