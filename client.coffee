@@ -12,6 +12,7 @@ Form = require 'form'
 Util = require 'util'
 Social = require 'social'
 Event = require 'event'
+Time = require 'time'
 
 exports.render = ->
 	if Page.state.get(0) is 'advanced'
@@ -87,6 +88,9 @@ renderRound = (round_no) ->
 	Social.renderComments round_no
 
 renderRoundList = ->
+	Dom.text "Next round in "
+	Time.deltaText(Db.shared.get('next'))
+
 	renderRoundItem = (round) ->
 		Ui.item ->
 			if !round.get('finished') and !Db.shared.get('votes', Plugin.userId())
