@@ -12,8 +12,6 @@ Form = require 'form'
 Util = require 'util'
 
 exports.render = ->
-	# TODO: Remove this when done.
-	Dom.h2 Page.state.get(0) + ': ' + Page.state.get(1) + ': ' + Page.state.get(2)
 	if Page.state.get(0) is 'advanced'
 		renderAdvanded()
 	else if Page.state.get(0) is 'round'
