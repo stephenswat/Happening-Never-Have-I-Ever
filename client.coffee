@@ -11,6 +11,7 @@ Form = require 'form'
 Util = require 'util'
 
 exports.render = ->
+	# TODO: Remove this when done.
 	Dom.h2 Page.state.get(0) + ': ' + Page.state.get(1) + ': ' + Page.state.get(2)
 	if Page.state.get(0) is 'advanced'
 		renderAdvanded()
@@ -19,7 +20,7 @@ exports.render = ->
 	else
 		renderRoundList()
 
-getRoundList = ->
+getRoundList = (round_no = null) ->
 	round_list = []
 
 	Db.shared.ref('rounds').observeEach (round) !->
@@ -27,11 +28,12 @@ getRoundList = ->
 
 	round_list
 
-renderRound = (round) ->
+renderRound = (round_no) ->
+	round = Db.shared.ref 'rounds', round_no
+
 	Dom.div ->
 		Dom.style fontSize: '150%', fontWeight: 'bold', textShadow: '0 1px 0 #fff', textAlign: 'center', padding: '4px 10px 10px 10px'
-		# Dom.text round
-		Dom.text Util.indexToQuestion(0)
+		Dom.text Util.stringToQuestion(round.get('question'))
 
 	Ui.bigButton 'I have!', ->
 		{}.noSuchMethod()
