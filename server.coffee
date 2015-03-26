@@ -16,7 +16,7 @@ exports.client_nextRound = nextRound = ->
 newRound = ->
 	eligable = []
 	adult = Db.shared.get 'adult'
-	previous = Db.shared.get('rounds', 'previous') || 0
+	previous = Db.shared.get 'round_no' || 0
 
 	for s, a in questions
 		if a >= adult
@@ -29,7 +29,7 @@ newRound = ->
 		duration = Util.getRoundDuration(time)
 		previous += 1
 
-		Db.shared.set 'rounds', 'previous', previous
+		Db.shared.set 'round_no', previous
 		Db.shared.set 'rounds', previous,
 			question: question
 			time: time

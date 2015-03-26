@@ -37,13 +37,12 @@ renderRound = (round) ->
 	Ui.bigButton 'Go to advanced...', -> Page.nav ['advanced']
 
 renderRoundList = ->
+	rounds = Db.shared.get 'rounds'
+
 	Ui.list ->
-		Ui.item ->
-			Dom.h2 "This is a list entry!"
-			Dom.onTap -> Page.nav ['round', 1]
-		Ui.item ->
-			Dom.h2 "This is also a list entry!"
-			Dom.onTap -> Page.nav ['round', 0]
+		Db.shared.ref('rounds').observeEach (round) !->
+			Ui.item ->
+				Dom.h2 Util.stringToQuestion(round.get('question'))
 
 renderAdvanded = ->
 	Dom.h2 "Hello, World!"
