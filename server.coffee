@@ -11,14 +11,29 @@ exports.onInstall = exports.onConfig = exports.onUpgrade = exports.onJoin = (con
 
 newRound = ->
 	eligable = []
-	allowAdult = Db.shared.get 'adult'
+	adult = Db.shared.get 'adult'
+	previous = Db.shared.get('rounds', 'previous') || 0
 
 	for s, a in questions
-		if a >= allowAdult
+		if a >= adult
 			eligable.push s
 
 	if eligable.length
 		index = Math.floor(Math.random() * eligable.length)
+		question = question[index][0]
+		time = 0|(Date.now()*.001)
+
+		Db.shared.set 'rounds', maxId,
+			qid: newQid
+			question: questions[newQid][0]
+			time: time
+
+		roundDuration = Util.getRoundDuration(time)
+
+		Timer.cancel()
+		Timer.set roundDuration*1000, 'newRound'
+		
+		Db.shared.set 'next', time+roundDuration
 
 # exported functions prefixed with 'client_' are callable by our client code using `require('plugin').rpc`
 exports.client_incr = ->
