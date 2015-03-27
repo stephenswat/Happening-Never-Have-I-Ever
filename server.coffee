@@ -30,8 +30,12 @@ newRound = ->
 	adult = Db.shared.get 'adult'
 	previous = Db.shared.get 'round_no' || 0
 
+	previous_questions = []
+	Db.shared.ref('rounds').observeEach (round) !->
+		previous_questions.push round.get('question')
+
 	for s, a in questions
-		if a >= adult
+		if a >= adult and s not in previous_questions
 			eligable.push s
 
 	if eligable.length
@@ -49,7 +53,7 @@ newRound = ->
 			finished: false
 
 		Timer.cancel()
-		Timer.set duration, 'newRound'
+		Timer.set duration, 'nextRound'
 
 		Db.shared.set 'next', time + duration
 
