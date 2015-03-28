@@ -53,7 +53,7 @@ newRound = ->
 			finished: false
 
 		Timer.cancel()
-		Timer.set duration, 'nextRound'
+		Timer.set duration * 1000, 'nextRound'
 
 		Db.shared.set 'next', time + duration
 
