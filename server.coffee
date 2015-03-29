@@ -14,7 +14,7 @@ exports.onInstall = exports.onConfig = exports.onUpgrade = exports.onJoin = (con
 	if !Db.shared.get('rounds')
 		newRound()
 
-exports.client_nextRound = nextRound = ->
+exports.client_nextRound = exports.nextRound = nextRound = ->
 	current = (Db.shared.get 'round_no' || 0)
 
 	if Db.shared.get 'rounds', current
