@@ -34,7 +34,7 @@ newRound = ->
 	Db.shared.ref('rounds').observeEach (round) !->
 		previous_questions.push round.get('question')
 
-	for s, a in questions
+	for [s, a] in questions
 		if a >= adult and s not in previous_questions
 			eligable.push s
 
