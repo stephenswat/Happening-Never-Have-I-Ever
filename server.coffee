@@ -35,7 +35,7 @@ newRound = ->
 		previous_questions.push round.get('question')
 
 	for [s, a] in questions
-		if a >= adult and s not in previous_questions
+		if a <= adult and s not in previous_questions
 			eligable.push s
 
 	if eligable.length
