@@ -40,7 +40,7 @@ newRound = ->
 
 	if eligable.length
 		index = Math.floor(Math.random() * eligable.length)
-		question = questions[index][0]
+		question = eligable[index]
 		time = 0 | (Date.now()*.001)
 		duration = Util.getRoundDuration(time)
 		previous += 1
